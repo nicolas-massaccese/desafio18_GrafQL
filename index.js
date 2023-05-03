@@ -6,6 +6,9 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 
+// graphQL
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./graphql/schema');
 
 // initializations
 const app = express();
@@ -48,49 +51,19 @@ app.use((req, res, next) => {
 });
 
 
+app.use('/graphql', graphqlHTTP({
+    schema,
+    graphiql: true
+}));
+
+
 // routes
 const { usersApiRouter } = require('./routes/usersApiRouter.js');
 app.use(usersApiRouter);
-// app.use(function(req, res) {
-//     res.json({
-//         error: {
-//             'name':'Error',
-//             'status':404,
-//             'message':'Invalid Request',
-//             'statusCode':404,
-//             'stack':'http://localhost:3000/'
-//         },
-//         message: 'Testing!'
-//     });
-// });
+
 
 
 // starting server
-// app.listen(app.get('port'), () => {
-//     console.log('SERVER ON PORT', app.get('port'))
-// });
-
-// const nodemailer = require('nodemailer')
-// const sendMail = async () => {
-
-//     const transporter = nodemailer.createTransport({
-//         host: 'smtp.ethereal.email',
-//         port: 587,
-//         auth: {
-//             user: process.env.EMAIL,
-//             pass: process.env.PASSWORD,
-//         }
-//     });
-// }
-
-// let info = await transporter.sendMail({
-//     from: `"Raul Lindgren" <${process.env.EMAIL}>`, // sender address
-//     to: process.env.EMAIL, // list of receivers
-//     subject: "Hello ✔", // Subject line
-//     text: "Hello world?", // plain text body
-//     html: "<b>Hello world?</b>", // html body
-// });
-
 
 connectToDb()
     // .then( async () => await createProduct())
